@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 IA Classificadora de Imagens</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-robot"></i> IA Classificadora</h1>
+            <p>Inteligência Artificial para Reconhecimento de Imagens</p>
+        </header>
+
+        <main class="main-content">
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>Arraste uma imagem aqui</h3>
+                    <p>ou clique para selecionar</p>
+                    <input type="file" id="fileInput" accept="image/*" hidden>
+                </div>
+                
+                <button class="analyze-btn" id="analyzeBtn" disabled>
+                    <i class="fas fa-brain"></i> Analisar com IA
+                </button>
+            </div>
+
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <h3><i class="fas fa-image"></i> Imagem Selecionada</h3>
+                <div class="image-container">
+                    <img id="imagePreview" alt="Preview da imagem">
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h3><i class="fas fa-chart-bar"></i> Resultados da IA</h3>
+                <div class="status-message" id="statusMessage"></div>
+                <div class="predictions-container" id="predictionsContainer"></div>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>🤖 IA processando imagem...</p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Powered by TensorFlow & MobileNetV2 • <span id="aiStatus">Verificando status...</span></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
