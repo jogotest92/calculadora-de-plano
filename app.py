@@ -115,6 +115,11 @@ def status():
         'message': '🤖 IA pronta para classificar imagens!'
     })
 
+@app.route('/calculadora')
+def calculadora():
+    """Página da calculadora de utilização proporcional"""
+    return render_template('calculadora_proporcional.html')
+
 if __name__ == '__main__':
     print("🚀 Iniciando servidor da IA...")
     print("📡 Acesse: http://localhost:5000")

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Calculadora de Utilização Proporcional - Standalone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Marca d'água */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calculation-details {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-row .form-group {
+            flex: 1;
+        }
+
+        .header-info {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header-info h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-info p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .watermark {
+                bottom: 10px;
+                right: 10px;
+                font-size: 10px;
+                padding: 8px 12px;
+            }
+
+            .header-info h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-info">
+        <h2><i class="fas fa-calculator"></i> Calculadora de Utilização Proporcional</h2>
+        <p>Versão Standalone - Execute diretamente no navegador</p>
+    </div>
+
+    <div class="container">
+        <h1>📊 Calcular Proporcional</h1>
+        
+        <form id="calculatorForm">
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="fechamento">📅 Dia do Fechamento da Fatura:</label>
+                    <input type="number" id="fechamento" min="1" max="31" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="troca">🔄 Dia da Troca do Plano:</label>
+                    <input type="number" id="troca" min="1" max="31" required>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="planoAntigo">💰 Valor do Plano Antigo (R$):</label>
+                    <input type="number" id="planoAntigo" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="planoNovo">💰 Valor do Plano Novo (R$):</label>
+                    <input type="number" id="planoNovo" step="0.01" min="0" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="ciclo">📆 Ciclo de Utilização no Mês (dias):</label>
+                <input type="number" id="ciclo" min="1" max="31" value="30" required>
+            </div>
+
+            <button type="submit" class="btn-calculate">🧮 Calcular Proporcional</button>
+        </form>
+
+        <div id="result" class="result">
+            <div id="resultText"></div>
+            <div id="calculationDetails" class="calculation-details"></div>
+        </div>
+    </div>
+
+    <div class="watermark">
+        Criado por Emanuel & Victor Vanissan
+    </div>
+
+    <script>
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fechamento = parseInt(document.getElementById('fechamento').value);
+            const troca = parseInt(document.getElementById('troca').value);
+            const planoAntigo = parseFloat(document.getElementById('planoAntigo').value);
+            const planoNovo = parseFloat(document.getElementById('planoNovo').value);
+            const ciclo = parseInt(document.getElementById('ciclo').value);
+            
+            // Validações
+            if (!fechamento || !troca || !planoAntigo || !planoNovo || !ciclo) {
+                alert('⚠️ Por favor, preencha todos os campos!');
+                return;
+            }
+            
+            if (troca > ciclo) {
+                alert('⚠️ O dia da troca não pode ser maior que o ciclo do mês!');
+                return;
+            }
+            
+            // Cálculos melhorados
+            let diasPlanoAntigo, diasPlanoNovo;
+            
+            // Calcular dias de uso de cada plano no período de faturamento
+            if (troca <= fechamento) {
+                // Troca aconteceu antes ou no dia do fechamento
+                diasPlanoAntigo = troca - 1; // Dias antes da troca
+                diasPlanoNovo = fechamento - troca + 1; // Dias após a troca até o fechamento
+            } else {
+                // Troca aconteceu depois do fechamento
+                // Considera o período do fechamento anterior até a troca
+                diasPlanoAntigo = troca - fechamento - 1;
+                diasPlanoNovo = ciclo - diasPlanoAntigo;
+            }
+            
+            // Garantir que os dias não sejam negativos
+            diasPlanoAntigo = Math.max(0, diasPlanoAntigo);
+            diasPlanoNovo = Math.max(0, diasPlanoNovo);
+            
+            // Ajustar se a soma dos dias exceder o ciclo
+            const totalDias = diasPlanoAntigo + diasPlanoNovo;
+            if (totalDias > ciclo) {
+                const fator = ciclo / totalDias;
+                diasPlanoAntigo = Math.round(diasPlanoAntigo * fator);
+                diasPlanoNovo = ciclo - diasPlanoAntigo;
+            }
+            
+            const valorProporcionalAntigo = (planoAntigo / ciclo) * diasPlanoAntigo;
+            const valorProporcionalNovo = (planoNovo / ciclo) * diasPlanoNovo;
+            const valorTotal = valorProporcionalAntigo + valorProporcionalNovo;
+            
+            // Exibir resultado
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('resultText');
+            const calculationDetails = document.getElementById('calculationDetails');
+            
+            resultText.innerHTML = `
+                <h3>💡 Valor Total da Fatura: R$ ${valorTotal.toFixed(2)}</h3>
+            `;
+            
+            calculationDetails.innerHTML = `
+                <strong>📋 Detalhes do Cálculo:</strong><br><br>
+                <div style="text-align: left; display: inline-block;">
+                    📊 <strong>Plano Antigo:</strong> ${diasPlanoAntigo} dias × R$ ${(planoAntigo/ciclo).toFixed(2)}/dia = <strong>R$ ${valorProporcionalAntigo.toFixed(2)}</strong><br>
+                    📊 <strong>Plano Novo:</strong> ${diasPlanoNovo} dias × R$ ${(planoNovo/ciclo).toFixed(2)}/dia = <strong>R$ ${valorProporcionalNovo.toFixed(2)}</strong><br><br>
+                    📅 <strong>Resumo:</strong> Ciclo de ${ciclo} dias | Fechamento no dia ${fechamento} | Troca no dia ${troca}<br>
+                    📊 <strong>Total de dias calculados:</strong> ${diasPlanoAntigo + diasPlanoNovo} dias
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+            
+            // Scroll suave para o resultado
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        // Formatação automática dos campos de valor
+        const valorInputs = ['planoAntigo', 'planoNovo'];
+        valorInputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', function(e) {
+                let value = e.target.value;
+                // Remove caracteres não numéricos exceto ponto e vírgula
+                value = value.replace(/[^0-9.,]/g, '');
+                // Substitui vírgula por ponto
+                value = value.replace(',', '.');
+                e.target.value = value;
+            });
+        });
+
+        // Info no console
+        console.log('📊 Calculadora de Utilização Proporcional');
+        console.log('Criado por Emanuel & Victor Vanissan');
+        console.log('Versão Standalone - Execute diretamente no navegador');
+    </script>
+</body>
+</html>
